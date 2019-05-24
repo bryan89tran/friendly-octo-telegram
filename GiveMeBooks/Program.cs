@@ -74,9 +74,11 @@ namespace GiveMeBooks
                 Console.WriteLine();
                 Console.WriteLine("All Books in database:");
 
+                Console.WriteLine(String.Format("{0, 20} {1, 20} {2, 20} {3, 20} {4, 20}", "Title", "Author", "Publisher", "ISBN", "HasImage"));
                 foreach (var book in db.DbBooks)
                 {
-                    Console.WriteLine(" - {0}", book.Title);
+                    
+                    Console.WriteLine(String.Format("{0, 20} {1, 20} {2, 20} {3, 20} {4, 20}", book.Title.Truncate(15), book.Authors.Truncate(15), book.Publisher.Truncate(15), book.ISBN, book.ImgUrl.Truncate(15)));
                 }
 
             }
@@ -86,11 +88,13 @@ namespace GiveMeBooks
         {
             using (var db = new BooksContext())
             {
+                int count = 0;
                 foreach (var item in rootObject.Items)
                 {
-                   var book = FilterBookData(item);
+                    var book = FilterBookData(item);
                     db.DbBooks.Add(book);
-                    var count = db.SaveChanges();
+                    db.SaveChanges();
+                    count++;
                     Console.WriteLine("{0} books saved to database", count);
                 }
             }
